@@ -1,8 +1,8 @@
 import { Button } from "@chakra-ui/button"
-import firebase from './../../config/firebase'
+import { firebaseClient } from './../../config/firebase/client'
 
 export const Agenda = () => {
-    const logout = () =>  firebase.auth().signOut()
+    const logout = () =>  firebaseClient.auth().signOut()
 
     return (
         <div>
