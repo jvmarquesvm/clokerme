@@ -1,17 +1,23 @@
 import { Container, Spinner } from '@chakra-ui/react'
 import { useAuth } from './../components'
-import { Login, Agenda } from './../components'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export default function Home() {
-  const [auth] = useAuth()
+  const auth = useAuth()
+  const router = useRouter()
 
-  if(auth.loading) {
+  useEffect(() => {
+    if(!auth.loading) {
+      auth.user ? router.push('/agenda') : router.push('/login')
+    }    
+  }, [auth.user])
+
+
     return (
       <Container p={4} centerContent>
         <Spinner />
       </Container>
     )
-  }
 
-  return auth.user ? <Agenda /> : <Login />
 }

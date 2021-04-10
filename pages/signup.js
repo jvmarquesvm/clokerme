@@ -2,12 +2,14 @@ import Link from 'next/link'
 import { useFormik } from 'formik'
 import * as  yup from 'yup'
 //import axios from 'axios'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 import { Container, Box, Input, Button, Text, FormControl,
          FormLabel, FormHelperText, InputLeftAddon, InputGroup
        } from '@chakra-ui/react'
 
-import { Logo, useAuth } from '../components'
+import { Agenda, Logo, useAuth } from '../components'
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('E-mail inválido').required('Preenchimento Obrigatório'),
@@ -17,6 +19,9 @@ const validationSchema = yup.object().shape({
 
 export default function Home() {
   const [ auth, {signup}] = useAuth()
+  const router = useRouter()
+
+
   const {  values, errors, touched,
            handleChange, handleBlur, handleSubmit, isSubmitting 
   } = useFormik ({ onSubmit: signup,
@@ -26,6 +31,10 @@ export default function Home() {
                           password: ''
                         }
   })
+
+  useEffect(() => {
+    auth.user && router.push('/agenda')
+  }, [auth.user])
  
   return (
     <Container p={4} centerContent>
