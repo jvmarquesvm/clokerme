@@ -6,19 +6,13 @@ import { useFetch } from '@refetty/react'
 import { Container, Button, Box, IconButton } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { addDays, subDays } from 'date-fns'
-import { getToken } from './../config/firebase/client'
 
-const getAgenda =  async ( when ) => { 
-    const token = await getToken()
-    return axios({
-        method: 'get',
-        url: '/api/agenda',
-        params: { when },
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-}
+const getSchedule = async ( when ) => axios({
+                    method: 'get',
+                    url: '/api/schedule',
+                    params: { when, username: window.location.pathname },
+                })
+
 
 const Header = ({ children }) => (
     <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" padding={4}>
@@ -31,7 +25,7 @@ export default function Agenda() {
     const [auth, { logout }] = useAuth()
     const router = useRouter()
     const [ when, setWhen ] = useState( () => new Date())
-    const [ data, { loading, status, error }, fetch ] = useFetch( getAgenda, {lazy: true} )
+    const [ data, { loading, status, error }, fetch ] = useFetch( getSchedule, {lazy: true} )
 
     console.log(`------->`, fetch)
 
