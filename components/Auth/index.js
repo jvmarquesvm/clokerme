@@ -7,11 +7,14 @@ const AuthContext = React.createContext([{}, () => { }])
 export const logout = () =>  firebaseClient.auth().signOut()
 
 export const login = async ({ email, password }) => {
-    console.log("Usuário Logando")
-    firebaseClient.auth().setPersistence(persistenceMode)   
+    console.log("Usuario fazendo login: " + email)
+    firebaseClient.auth().setPersistence(persistenceMode)
+
+    console.log("Email: " + email + " password: " + password)
 
     try {
       await firebaseClient.auth().signInWithEmailAndPassword(email, password)
+      console.log("Login feito com sucesso: " + email )
       return firebaseClient.auth().currentUser
     } catch (error) {
       console.log('LOGIN ERROR:', error)
@@ -31,20 +34,20 @@ export const signup = async ({ email, password, username }) => {
 
     try {
         await firebaseClient.auth().createUserWithEmailAndPassword(email, password)
+        console.log("Usuario criado no firebase " + email)
+
         const user =  await login({email, password})
         const token = await user.getIdToken()
+
+        console.log("Token Recupeado " + token)
 
         const { data } = await axios({
                 method: 'post',
                 url: '/api/profile',
-                data: {
-                  username
-                },
-                headers: {
-                  'Authorization': `Bearer ${token}`
-                },
+                data: { username },
+                headers: { 'Authorization': `Bearer ${token}` },
               })
-        console.log(data)
+        console.log("Retorno da api: ", data)
     } catch (error) {
       console.log('SIGNUP ERROR:', error)
     }
