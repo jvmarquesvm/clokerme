@@ -1,21 +1,13 @@
 import Link from 'next/link'
 import { useFormik } from 'formik'
 import * as  yup from 'yup'
+//import axios from 'axios'
 
-import {Container,
-        Box,
-        Input,
-        Button,
-        Text,
-        FormControl,
-        FormLabel,
-        FormHelperText,
-        InputLeftAddon,
-        InputGroup
-        } from '@chakra-ui/react'
+import { Container, Box, Input, Button, Text, FormControl,
+         FormLabel, FormHelperText, InputLeftAddon, InputGroup
+       } from '@chakra-ui/react'
 
-import { Logo } from './../components'
-import { firebaseClient  } from './../config/firebase/client'
+import { Logo, useAuth } from '../components'
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('E-mail inválido').required('Preenchimento Obrigatório'),
@@ -24,18 +16,10 @@ const validationSchema = yup.object().shape({
 })
 
 export default function Home() {
-  const {  
-      values, errors, touched,
-      handleChange, handleBlur, handleSubmit, isSubmitting 
-  } = useFormik ({ onSubmit: async (values, form) => {
-                    console.log("Passou akiii!!")
-                    try {
-                      const user = await firebaseClient.auth().createUserWithEmailAndPassword(values.email, values.password)
-                      console.log(user)
-                    } catch (error) {
-                      console.log('ERROR:', error)
-                    }
-                },
+  const [ auth, {signup}] = useAuth()
+  const {  values, errors, touched,
+           handleChange, handleBlur, handleSubmit, isSubmitting 
+  } = useFormik ({ onSubmit: signup,
                 validationSchema, initialValues: {
                           email: '',
                           usename: '',

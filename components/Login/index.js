@@ -8,38 +8,26 @@ import { Container , Box , Input, Button,
         } from '@chakra-ui/react'
 
 import { Logo } from '../Logo'
-import  { firebaseClient, persistenceMode }  from './../../config/firebase/client'
-//import { useEffect } from 'react'
+import { useAuth } from '../Auth'
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('E-mail inválido').required('Preenchimento Obrigatório'),
     password: yup.string().required('Preenchimento Obrigatório'),
 })
 
+//export default function Login() {
 export const Login = () => {
+  const[ auth, { login }] = useAuth()
   const {  values, errors, touched, handleChange,  handleBlur, 
-    handleSubmit, isSubmitting 
-  } = useFormik ({ onSubmit: async (values, form) => {
-                    console.log("Passou akiii!!")
-                    firebaseClient.auth().setPersistence(persistenceMode)   
-                    try {
-                      const user = await firebaseClient.auth().signInWithEmailAndPassword(values.email, values.password)
-                      console.log(user)
-                    } catch (error) {
-                      console.log('ERROR:', error)
-                    }
-                },
-                validationSchema, initialValues: {
-                          email: '',
-                          usename: '',
-                          password: ''
-                        }
+           handleSubmit, isSubmitting 
+  } = useFormik ({ onSubmit: login,
+                   validationSchema, 
+                   initialValues: { email: '',
+                                     usename: '',
+                                     password: ''
+                                  }
   })
- /*
-  useEffect(() => {
-    console.log("Usuário - Sessão Ativa? ", firebase.auth().currentUser)
-  }, [])
- */ 
+
   return (
     <Container p={4} centerContent>
       <Logo />
