@@ -13,7 +13,6 @@ export default function Home() {
     }    
   }, [auth.user])
 
-
     return (
       <Container p={4} centerContent>
         <Spinner />
