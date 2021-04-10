@@ -14,10 +14,11 @@ export default async (req, res) => {
 
     console.log("UID:" + user_id)
     
-    profile.doc(req.body.username).set({
+    const retornoFireStore = await profile.doc(req.body.username).set({
       userId: user_id,
       username: req.body.username
     })
+    console.log(retornoFireStore)
 
     console.log("Usuario gravado no firestore com sucesso " + req.body.username)
 
