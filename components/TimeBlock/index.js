@@ -17,7 +17,7 @@ const setSchedule = async ({ date, ...data }) => axios({
     },
 })
 
-export const TimeBlock = ({ time, date }) => {
+export const TimeBlock = ({ time, date, disabled }) => {
     
     const [isOpen, setIsOpen] = useState(false) 
     const toggle = () => setIsOpen(prevState => !prevState)
@@ -43,9 +43,9 @@ export const TimeBlock = ({ time, date }) => {
 
 
     return (
-        <Button p={8}  bg="blue.500"  color="white"  onClick={toggle} >
+        <Button p={8}  bg="blue.500"  color="white"  onClick={toggle}  disabled={disabled} >
             {time}
-            <ModalTimeBlock isOpen={isOpen} onClose={toggle}  
+            { !disabled && <ModalTimeBlock isOpen={isOpen} onClose={toggle}  
                                onComplete={handleSubmit} isSubmitting={isSubmitting} >
                 <>
                     <Input placeholder="Digite seu nome:" size="lg" name="name" 
@@ -57,7 +57,7 @@ export const TimeBlock = ({ time, date }) => {
                            size="lg" mt={4} error={errors.phone} 
                            onBlur={handleBlur}  disabled={isSubmitting} />
                 </>
-            </ModalTimeBlock>
+            </ModalTimeBlock> }
         </Button>        
     )
 }

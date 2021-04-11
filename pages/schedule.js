@@ -6,11 +6,14 @@ import { useFetch } from '@refetty/react'
 import { Container, Button, Box, IconButton, SimpleGrid, Spinner } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { addDays, subDays } from 'date-fns'
+import format from 'date-fns/format'
 
 const getSchedule = async ( when ) => axios({
                     method: 'get',
                     url: '/api/schedule',
-                    params: { when , username: window.location.pathname },
+                    params: {   username: window.location.pathname.replace('/',''),
+                                date: format( when, 'yyyy-MM-dd')
+                            },
                 })
 
 
@@ -50,7 +53,7 @@ export default function Schedule() {
             </Box>
             <SimpleGrid p={4} columns={2} spacing={4}>
                 {loading && <Spinner thickness="4px" speed="0.65" emptyColor="gray.200" color="blue.500" size="xl" />}
-                {data?.map(time => <TimeBlock key={time} time={time} date={when} /> )}
+                {data?.map( ({ time, isBlocked }) => <TimeBlock key={time} time={time} date={when} disabled={isBlocked} /> )}
             </SimpleGrid>
         </Container>
     )

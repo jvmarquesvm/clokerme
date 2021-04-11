@@ -27,7 +27,7 @@ export default function Home() {
   } = useFormik ({ onSubmit: signup,
                 validationSchema, initialValues: {
                           email: '',
-                          usename: '',
+                          username: '',
                           password: ''
                         }
   })
