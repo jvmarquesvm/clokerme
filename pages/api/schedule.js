@@ -28,30 +28,31 @@ const getUserId = async ( username ) => {
     return userId
 }
 
-
 const setSchedule = async (req, res) => {
     try {
         const userId = await getUserId(req.body.username)
-        const doc   = await agenda.doc(`${userId}#${req.body.when}`).get()
+        const docId = `${userId}#${req.body.date}#${req.body.time}`
+
+        const doc = await agenda.doc(docId).get()
 
         if (doc.exists) {
-            return res.status(400)
+            return res.status(400).json("Horario já resevado")
         }
         console.log("Chamando servico de gravar na agenda")
         
-        await agenda.doc(`${userId}#${req.body.when}`).set({
+        const block = await agenda.doc(docId).set({
             userId,
-            when: req.body.when,
+            date: req.body.date,
+            time: req.body.time,
             name: req.body.name,
             phone: req.body.phone,
         })
         console.log("Finalizando servico de gravar na agenda")
-        return res.status(200).json(userId)
+        return res.status(200).json(block)
     } catch(error){
         console.log("Erro API Schedule: ", error )
-        return res.status(400)
+        return res.status(400).json("Error - Horario já resevado", error)
     }
-
 }
 
 const getSchedule =  (req, res) => {

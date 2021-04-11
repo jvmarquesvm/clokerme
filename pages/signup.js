@@ -59,7 +59,7 @@ export default function Home() {
         <FormControl id="username" p={4} isRequired>
           <InputGroup size="lg">
             <InputLeftAddon children="clocker.work/" />
-            <Input type="username" value={values.username} onChange={handleChange} onBlur={handleBlur} />
+            <Input type="username" value={values.username} onChange={handleChange} onBlur={handleBlur} placeholder="id do usuario" />
           </InputGroup>
           {touched.username && <FormHelperText textColor="#e74c3c">{errors.username}</FormHelperText>}
         </FormControl>
