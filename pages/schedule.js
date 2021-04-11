@@ -1,16 +1,16 @@
-import { Logo, useAuth, formatDate } from './../components'
+import { Logo, useAuth, formatDate, TimeBlock } from './../components'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import { useFetch } from '@refetty/react'
-import { Container, Button, Box, IconButton } from '@chakra-ui/react'
+import { Container, Button, Box, IconButton, SimpleGrid, Spinner } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { addDays, subDays } from 'date-fns'
 
 const getSchedule = async ( when ) => axios({
                     method: 'get',
                     url: '/api/schedule',
-                    params: { when, username: window.location.pathname },
+                    params: { when , username: window.location.pathname },
                 })
 
 
@@ -20,7 +20,7 @@ const Header = ({ children }) => (
     </Box>
 )
 
-export default function Agenda() {
+export default function Schedule() {
 
     const [auth, { logout }] = useAuth()
     const router = useRouter()
@@ -31,10 +31,6 @@ export default function Agenda() {
 
     const addDay = () => setWhen( prevState => addDays( prevState, 1))
     const removeDay = () => setWhen( prevState => subDays( prevState, 1))
-
-    useEffect(() => {
-      !auth.user && router.push('/')
-    }, [auth.user])
 
     useEffect(() => {
         fetch(when)
@@ -52,6 +48,10 @@ export default function Agenda() {
                 <Box flex={1} textAlign="center">{ formatDate(when, 'PPPP') }</Box>
                 <IconButton icon={ <ChevronRightIcon />}  bg="transparent" onClick={addDay} />
             </Box>
+            <SimpleGrid p={4} columns={2} spacing={4}>
+                {loading && <Spinner thickness="4px" speed="0.65" emptyColor="gray.200" color="blue.500" size="xl" />}
+                {data?.map(time => <TimeBlock key={time} time={time} /> )}
+            </SimpleGrid>
         </Container>
     )
 }
