@@ -17,14 +17,22 @@ for(let blockIndex = 0; blockIndex <= totalHours; blockIndex++){
 }
 
 const getUserId = async ( username ) => {
-    console.log(username)
+    console.log("getUserId: usuario ", username)
+
+    if(!username){
+        return false
+    }
+
     const profileDoc = await profile 
         .where('username', '==', username)
         .get()
 
-    console.log(profileDoc.docs[0].data())
+    if( !profileDoc.docs.length ){
+        return false
+    }
 
-    const { userId } = profileDoc.docs[0]?.data()
+    console.log("Documentos recuperado Firebase: ", profileDoc.docs[0].data())
+    const { userId } = profileDoc.docs[0].data()
     return userId
 }
 
@@ -36,7 +44,8 @@ const setSchedule = async (req, res) => {
         const doc = await agenda.doc(docId).get()
 
         if (doc.exists) {
-            return res.status(400).json("Horario já resevado")
+             res.status(400).json({message: 'Horario já reservado!!' })
+             return
         }
         console.log("Chamando servico de gravar na agenda")
         
@@ -57,10 +66,15 @@ const setSchedule = async (req, res) => {
 
 const getSchedule = async (req, res) => {
     try {
+        console.log("Usuario que chegou getSchedule:", req.query.username)
         const userId = await getUserId(req.query.username)
-        // const profileDoc = await profile
-        //     .where('username', '==', req.query.username)
-        //     .get()
+
+        if(!userId){
+            return res.status(401).json({message: 'Usuario nao encontrado'})
+        }
+
+        console.log("getSchedule: usuario",  userId)
+        console.log("getSchedule: data", req.query.date)
 
         const snapshot = await agenda.where('userId', '==', userId)
                                        .where('date', '==', req.query.date)
@@ -77,7 +91,7 @@ const getSchedule = async (req, res) => {
         return res.status(200).json(result)
     } catch (error) {
         console.log('FB ERROR:', error)
-        return res.status(401)
+        return res.status(401).json({message: 'Nao Autorizado!!'})
     }
 
 }

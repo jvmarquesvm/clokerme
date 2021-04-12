@@ -41,26 +41,22 @@ export default function Login() {
       <Box p={4} mt={8}>
         <Text>Crie sua agenda compartilhada</Text>
       </Box>
+      
+      <FormControl id="email" p={2} isRequired>
+        <FormLabel>Email</FormLabel>
+        <Input size="lg" type="email" value={values.email} onChange={handleChange} onBlur={handleBlur}   />
+        {touched.email && <FormHelperText textColor="#e74c3c">{errors.email}</FormHelperText>}
+      </FormControl>
 
-      <Box>
-        <FormControl id="email" p={4} isRequired>
-          <FormLabel>Email</FormLabel>
-          <Input size="lg" type="email" value={values.email} onChange={handleChange} onBlur={handleBlur} />
-          {touched.email && <FormHelperText textColor="#e74c3c">{errors.email}</FormHelperText>}
-        </FormControl>
+      <FormControl id="password" p={2} isRequired>
+        <FormLabel>Senha</FormLabel>
+        <Input size="lg" type="password" value={values.password} onChange={handleChange} onBlur={handleBlur}  />
+        {touched.password && <FormHelperText textColor="#e74c3c">{errors.password}</FormHelperText>}
+      </FormControl>
 
-        <FormControl id="password" p={4} isRequired>
-          <FormLabel>Senha</FormLabel>
-          <Input size="lg" type="password" value={values.password} onChange={handleChange} onBlur={handleBlur} />
-          {touched.password && <FormHelperText textColor="#e74c3c">{errors.password}</FormHelperText>}
-        </FormControl>
+      <Button m={4} colorScheme="blue" width="100%"  onClick={handleSubmit} isLoading={isSubmitting}>Entrar</Button>
 
-        <Box p={4}>
-          <Button colorScheme="blue" width="100%" onClick={handleSubmit} isLoading={isSubmitting}>Entrar</Button>
-        </Box>
-      </Box>
-
-      <Link href="/signup">Ainda não tem uma conta? Cadastre-se</Link>
+      <Link  href="/signup">Ainda não tem uma conta? Cadastre-se</Link>
     </Container>
   )
 }
