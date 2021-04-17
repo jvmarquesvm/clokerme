@@ -7,8 +7,8 @@ export default async (req, res) => {
     console.log( req.headers.authorization )
     const [ , tokenSplitado ] = req.headers.authorization.split(' ')
 
-    if(!tokenSplitado){
-        return res.status(401)
+    if(!tokenSplitado || typeof tokenSplitado === "undefined" || tokenSplitado == "undefined"){
+        return res.status(401).json("Requisição inválida. token enviado: ", tokenSplitado )
     }
     
     try {
